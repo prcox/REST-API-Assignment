@@ -45,7 +45,14 @@ def hello_world():
 def get_users():
     if request.method == 'GET':
         search_username = request.args.get('name')
+        search_job = request.args.get('job')
         if search_username:
+            if search_job:
+                subdict = {'users_list': []}
+                for user in users['users_list']:
+                    if user['name'] == search_username and user['job'] == search_job:
+                        subdict['users_list'].append(user)
+                return subdict
             subdict = {'users_list': []}
             for user in users['users_list']:
                 if user['name'] == search_username:
@@ -61,11 +68,21 @@ def get_users():
         return resp
 
 
-@app.route('/users/<id>')
+
+@app.route('/users/<id>', methods=['GET', 'DELETE'])
 def get_user(id):
-    if id:
+    if request.method == 'GET':
+        if id:
+            for user in users['users_list']:
+                if user['id'] == id:
+                    return user
+            return {}
+        return users
+    elif request.method == 'DELETE':
         for user in users['users_list']:
             if user['id'] == id:
-                return user
-        return ({})
-    return users
+                users['users_list'].remove(user)
+                resp = jsonify(success=True)
+                # resp.status_code = 200 #optionally, you can always set a response code.
+                # 200 is the default code for a normal response
+                return resp
