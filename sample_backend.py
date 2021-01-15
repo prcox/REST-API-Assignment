@@ -65,7 +65,7 @@ def get_users():
         return users
     elif request.method == 'POST':
         userToAdd = request.get_json()
-        userToAdd['id'] = ''.join(random.choice(string.ascii_lowercase+string.digits) for i in range(6))
+        userToAdd['id'] = genrate_id()
         users['users_list'].append(userToAdd)
         resp = jsonify(success=True)
         resp.status_code = 201
@@ -73,6 +73,8 @@ def get_users():
         # 200 is the default code for a normal response
         return resp
 
+def genrate_id():
+    return ''.join(random.choice(string.ascii_lowercase+string.digits) for i in range(6))
 
 
 @app.route('/users/<id>', methods=['GET', 'DELETE'])
