@@ -1,11 +1,6 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
-<<<<<<< Updated upstream
-
-app = Flask(__name__)
-
-=======
 from flask_cors import CORS
 import random
 import string
@@ -17,7 +12,6 @@ app = Flask(__name__)
 # CORS stands for Cross Origin Requests.
 CORS(app)  # Here we'll allow requests coming from any domain. Not recommended for production environment.
 
->>>>>>> Stashed changes
 users = {
     'users_list':
         [
@@ -60,48 +54,6 @@ def get_users():
     if request.method == 'GET':
         search_username = request.args.get('name')
         search_job = request.args.get('job')
-<<<<<<< Updated upstream
-        if search_username:
-            if search_job:
-                subdict = {'users_list': []}
-                for user in users['users_list']:
-                    if user['name'] == search_username and user['job'] == search_job:
-                        subdict['users_list'].append(user)
-                return subdict
-            subdict = {'users_list': []}
-            for user in users['users_list']:
-                if user['name'] == search_username:
-                    subdict['users_list'].append(user)
-            return subdict
-        return users
-    elif request.method == 'POST':
-        userToAdd = request.get_json()
-        users['users_list'].append(userToAdd)
-        resp = jsonify(success=True)
-        # resp.status_code = 200 #optionally, you can always set a response code.
-        # 200 is the default code for a normal response
-        return resp
-
-
-
-@app.route('/users/<id>', methods=['GET', 'DELETE'])
-def get_user(id):
-    if request.method == 'GET':
-        if id:
-            for user in users['users_list']:
-                if user['id'] == id:
-                    return user
-            return {}
-        return users
-    elif request.method == 'DELETE':
-        for user in users['users_list']:
-            if user['id'] == id:
-                users['users_list'].remove(user)
-                resp = jsonify(success=True)
-                # resp.status_code = 200 #optionally, you can always set a response code.
-                # 200 is the default code for a normal response
-                return resp
-=======
         if search_username and search_job:
             users = User().find_by_name_job(search_username, search_job)  # not converted to DB access yet
         elif search_username:
@@ -141,7 +93,7 @@ def get_user(id):
 #     for user in users['users_list']:
 #         if user['name'] == name:
 #             subdict['users_list'].append(user)
-#     return subdict   
+#     return subdict
 
 def find_users_by_name_job(name, job):
     subdict = {'users_list': []}
@@ -153,4 +105,3 @@ def find_users_by_name_job(name, job):
 # def generate_id():
 #     lettersAndDigits = string.ascii_letters + string.digits
 #     return ''.join((random.choice(lettersAndDigits) for i in range(6)))
->>>>>>> Stashed changes
